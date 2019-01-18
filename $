@@ -1,0 +1,45 @@
+#include "subject.h"
+
+/*PRIVATE VARIABLES*/
+
+bool addObserver(void * self, void (*observer)()){
+	uint8_t i;
+	void (*observer_buffer)() = NULL;
+	for(i = 0 ; i < NUMBER_OF_OBSERVERS_MAX ; i++){
+		observer_buffer = (void*)(((Subject *)self)->observers+i);
+	        observer_buffer = (void (*)(void))(*((Subject *)self)->observers+i);
+		//printf("%u\r\n",&observer_buffer);
+		if(*observer_buffer == NULL){
+			observer_buffer = observer;
+			*((Subject *)self)->observers+i = observer;
+			printf("%u\r\n",*((Subject *)self)->observers+i);
+			return true;
+		}
+	}
+	return false;
+}
+
+void deleteObserver(void * self, void (*observer)()){
+	uint8_t i;
+	void (*observer_buffer)() = NULL;
+	for(i = 0 ; i < NUMBER_OF_OBSERVERS_MAX ; i++){
+		observer_buffer = (void*)(((Subject *)self)->observers+i);
+		if(*observer_buffer  == observer){
+			//*observer_buffer  = NULL;
+		}
+	}
+}
+
+void notifyObservers(void * self){
+	uint8_t i;
+	void (*observer_buffer)(void) = NULL;
+	for(i = 0 ; i < NUMBER_OF_OBSERVERS_MAX ; i++){
+	        observer_buffer = (void (*)(void))(*(((Subject *)self)->observers+i));
+			printf("%u\r\n",*(observer_buffer));
+		if(*observer_buffer != 0){
+			printf("%u\r\n",*(observer_buffer));
+			printf("HERE2\r\n");
+			//(*observer_buffer)();
+		}
+	}
+}
